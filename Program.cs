@@ -9,7 +9,7 @@ namespace WAVRipper
 {
     class Program
     {
-        const string file = "1000HzSine~2";
+        const string file = "Jenkins (1)";
         static int bitsPerSample = 16;
         static void Main(string[] args)
         {
@@ -38,7 +38,7 @@ namespace WAVRipper
 
             else
             {
-                double answer = (s + ((2^bitsPerSample) / 2)) / 2;
+                double answer = (s + (Math.Pow(2, bitsPerSample) / 2)) / 2;
                 return (int) answer;
             }
         }
