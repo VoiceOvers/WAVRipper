@@ -9,7 +9,8 @@ namespace WAVRipper
 {
     class Program
     {
-        const string file = "1000HzSine";
+        const string file = "1000HzSine~2";
+        static int bitsPerSample = 16;
         static void Main(string[] args)
         {
             double[] left;
@@ -37,7 +38,7 @@ namespace WAVRipper
 
             else
             {
-                double answer = (s + 32768) / 2;
+                double answer = (s + ((2^bitsPerSample) / 2)) / 2;
                 return (int) answer;
             }
         }
@@ -50,7 +51,7 @@ namespace WAVRipper
             // Determine if mono or stereo
             int channels = wav[22];     // Forget byte 23 as most of WAVs are 1 or 2 channels
 
-            int bitsPerSample = (int) bytesToDouble(wav[34], wav[35], false);
+            bitsPerSample = (int) bytesToDouble(wav[34], wav[35], false);
             Console.WriteLine("bits per sample is " + bitsPerSample);
 
             // Get past all the other sub chunks to get to the data subchunk:
@@ -78,7 +79,13 @@ namespace WAVRipper
             int i = 0;
             while (pos < wav.Length)
             {
-                left[i] = bytesToDouble(wav[pos], wav[pos + 1], true);
+                if (bitsPerSample == 16)
+                    left[i] = bytesToDouble(wav[pos], wav[pos + 1], true);
+                else if (bitsPerSample == 8)
+                {
+                    double answer = (wav[pos] + (((Math.Pow(2, bitsPerSample)) / 2))) / 2;
+                    left[i] = (int) answer;
+                }
                 pos += 2;
                 if (channels == 2)
                 {
