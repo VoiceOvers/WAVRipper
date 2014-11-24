@@ -9,7 +9,7 @@ namespace WAVRipper
 {
     class Program
     {
-        const string file = "Jenkins (1)";
+        const string file = "Beep5High~1";
         static int bitsPerSample = 16;
         static void Main(string[] args)
         {
@@ -68,7 +68,7 @@ namespace WAVRipper
 
             // Pos is now positioned to start of actual sound data.
             int samples = (wav.Length - pos) / (bitsPerSample / 8);     // 2 bytes per sample (16 bit sound mono)
-            if (channels == 2) samples /= (bitsPerSample / 8);        // 4 bytes per sample (16 bit stereo)
+            if (channels == 2) samples /= 2;        // 4 bytes per sample (16 bit stereo)
 
             // Allocate memory (right will be null if only mono sound)
             left = new double[samples];
@@ -80,17 +80,25 @@ namespace WAVRipper
             while (pos < wav.Length)
             {
                 if (bitsPerSample == 16)
+                {
                     left[i] = bytesToDouble(wav[pos], wav[pos + 1], true);
+                    pos += 2;
+                }
                 else if (bitsPerSample == 8)
                 {
                     double answer = (wav[pos] + (((Math.Pow(2, bitsPerSample)) / 2))) / 2;
-                    left[i] = (int) answer;
+                    left[i] = (int)answer;
+                    pos += 1;
                 }
-                pos += 2;
-                if (channels == 2)
+                if (channels == 2 && bitsPerSample == 16)
                 {
                     right[i] = bytesToDouble(wav[pos], wav[pos + 1], true);
                     pos += 2;
+                }
+                else if (channels == 2 && bitsPerSample == 8)
+                {
+                    right[i] = wav[pos] + (((Math.Pow(2, bitsPerSample)) / 2)) / 2;
+                    pos += 1;
                 }
                 i++;
             }
