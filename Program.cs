@@ -31,7 +31,7 @@ namespace WAVRipper
                     streamWriter.Write(d + ", ");
             
             }
-            Console.Out.Write("done");
+            Console.Out.Write("Done.  Length is " + left.Length);
             output.Close();
             Console.ReadKey();            
         }
