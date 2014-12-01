@@ -9,12 +9,12 @@ namespace WAVRipper
 {
     class Program
     {
-        const string file = "Jenkins (1)~1";
+        const string file = "CallingForHelpWithGain~4";
         static int bitsPerSample = 16;
         static bool getDuty = true;
         const float sampleRate = 1000000;
         const float clockRate = 60000000;
-        const int highSpeedClockDiv = 5;
+        const int highSpeedClockDiv = 3;
         static float maxValue;
         static int periodForSampleRate = (int)(((1/sampleRate) * clockRate) / (highSpeedClockDiv));
         static void Main(string[] args)
